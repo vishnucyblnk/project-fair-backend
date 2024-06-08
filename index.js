@@ -32,7 +32,7 @@
 
 
 // 7. Customise port for server app
-    const PORT = 4000 || process.env.PORT
+    const PORT = process.env.PORT || 5000
 
     // export uploads folder
     pfServer.use('/uploads',express.static('./uploads'))
