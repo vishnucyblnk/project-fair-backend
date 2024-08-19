@@ -1,6 +1,7 @@
 // import user model
-const users = require('../Models/userSchema')
-const jwt = require('jsonwebtoken')
+const users = require('../Models/userSchema');
+const jwt = require('jsonwebtoken');
+const githubController = require('../Controllers/githubController');
 
 // register
     exports.register = async (req,res)=>{
@@ -53,17 +54,26 @@ const jwt = require('jsonwebtoken')
 
 // edit profile
     exports.editProfile = async(req,res)=>{
-        console.log("inside");
+        console.log("inside editing profile function");
         const userId = req.payload
         const {username,email,password,github,linkedin,profImg} = req.body
         const uploadedImage = req.file ? req.file.filename : profImg
         const {id} = req.params 
         try{
+
+            const existingProfile = await users.findOne({ _id: id });
+            if (!existingProfile) {
+                return res.status(404).json('User Profile not found');
+            }
+            const prevImg = existingProfile.profImg;
+
             const updateProfile = await users.findByIdAndUpdate({_id:id},{
                 username,email,password,github,linkedin,profImg:uploadedImage
             },{new:true})
             await updateProfile.save()
             res.status(200).json({updateProfile,role:"user"})
+
+            githubController.editInGitHub(prevImg,uploadedImage,'image');
 
         }catch(err){
             res.status(401).json(`Error!!! Transaction failed: ${err}`)

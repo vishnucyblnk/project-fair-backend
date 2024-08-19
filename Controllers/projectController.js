@@ -1,5 +1,6 @@
 // import project model
-const projects = require('../Models/projectSchema')
+const projects = require('../Models/projectSchema');
+const githubController = require('../Controllers/githubController');
 
 // add project 
     exports.addProject = async (req,res)=>{
@@ -17,6 +18,7 @@ const projects = require('../Models/projectSchema')
                 })
                 await newProject.save()
                 res.status(200).json(newProject)
+                githubController.uploadImages(req,res);
             }
         }catch(err){
             res.status(401).json(`Error!!! Transaction failed: ${err}`)
@@ -66,11 +68,20 @@ exports.editProject = async(req,res)=>{
     const uploadedImage = req.file ? req.file.filename : projectImage
     const {id} = req.params 
     try{
+
+        const existingProject = await projects.findOne({ _id: id });
+        if (!existingProject) {
+            return res.status(404).json('Project not found');
+        }
+        const prevImg = existingProject.projectImage;
+
         const updateProject = await projects.findByIdAndUpdate({_id:id},{
             title,languages,github,website,overview,projectImage:uploadedImage,userId
         },{new:true})
         await updateProject.save()
         res.status(200).json(updateProject)
+
+        githubController.editInGitHub(prevImg,uploadedImage,'image');
 
     }catch(err){
         res.status(401).json(`Error!!! Transaction failed: ${err}`)
@@ -83,8 +94,17 @@ exports.editProject = async(req,res)=>{
     exports.deleteProject = async(req,res)=>{
         const {id} = req.params
         try{
+
+            const existingProject = await projects.findOne({ _id: id });
+            if (!existingProject) {
+                return res.status(404).json('Project not found');
+            }
+
             const removeProject = await projects.findByIdAndDelete({_id:id})
             res.status(200).json(removeProject)
+
+            githubController.deleteFromGitHub(existingProject?.projectImage, 'image');
+            
         }catch(err){
             res.status(401).json(`Error!!! Transaction failed: ${err}`)
         }

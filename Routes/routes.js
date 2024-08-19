@@ -25,7 +25,7 @@
     // getallprojects
         router.get('/projects/all',jwtMiddleware,projectController.getAllProjects)
     // editproject - path parameter is id
-        router.put('/project/edit/:id',jwtMiddleware,multerConfig.single('projectImage'),projectController.editProject) 
+        router.put('/project/edit/:id',jwtMiddleware,multerConfig.single('projectImage'),projectController.editProject)
     // deleteproject
         router.delete('/project/remove/:id',jwtMiddleware,projectController.deleteProject) 
     // editprofile - path parameter is id
