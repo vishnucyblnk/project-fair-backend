@@ -17,7 +17,7 @@
     // login 
         router.post('/user/login' ,userController.login)
     // addproject
-        router.post('/projects/add',jwtMiddleware,multerConfig.single('projectImage'),projectController.addProject)
+        router.post('/projects/add',jwtMiddleware,multerConfig('image').single('projectImage'),projectController.addProject)
     // getuserProjects
         router.get('/user/all-projects',jwtMiddleware,projectController.getAllUserProjects)
     // gethomeprojects
@@ -25,11 +25,11 @@
     // getallprojects
         router.get('/projects/all',jwtMiddleware,projectController.getAllProjects)
     // editproject - path parameter is id
-        router.put('/project/edit/:id',jwtMiddleware,multerConfig.single('projectImage'),projectController.editProject)
+        router.put('/project/edit/:id',jwtMiddleware,multerConfig('image').single('projectImage'),projectController.editProject)
     // deleteproject
         router.delete('/project/remove/:id',jwtMiddleware,projectController.deleteProject) 
     // editprofile - path parameter is id
-        router.put('/profile/edit/:id',jwtMiddleware,multerConfig.single('profImg'),userController.editProfile)
+        router.put('/profile/edit/:id',jwtMiddleware,multerConfig('image').single('profImg'),userController.editProfile)
 
 
 // export router 

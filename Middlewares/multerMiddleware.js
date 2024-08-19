@@ -19,9 +19,19 @@ const fileFilter = (req,file,callback)=>{
     }
 }
 
-const multerConfig = multer({
-    storage,
-    fileFilter
-})
+
+const multerConfig = (fileType) =>{
+    let storage,fileFilter;
+    if(fileType === 'image'){
+        storage = imageStorage;
+        fileFilter = imageFileFilter;
+    }else{
+        throw new Error("Unsupported file type!");
+    }
+    return multer({
+        storage,
+        fileFilter
+    });
+};
 
 module.exports = multerConfig
