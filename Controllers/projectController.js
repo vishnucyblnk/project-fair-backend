@@ -28,6 +28,7 @@ const githubController = require('../Controllers/githubController');
     
 // get user all projects
 exports.getAllUserProjects = async (req,res)=>{
+    console.log("Inside get user all projects function");
     const userId = req.payload
     try{
         const userProjects = await projects.find({userId})
@@ -39,6 +40,7 @@ exports.getAllUserProjects = async (req,res)=>{
 
 // get home projects
 exports.getHomeProjects = async(req,res)=>{
+    console.log("Inside get home projects function");
     try{
         const homeProjects = await projects.find().limit(3)
         res.status(200).json(homeProjects)
@@ -49,6 +51,7 @@ exports.getHomeProjects = async(req,res)=>{
 
 // get all projects
 exports.getAllProjects = async(req,res)=>{
+    console.log("get all projects");
     const searchKey = req.query.search
     const query = {
         languages:{$regex:searchKey, $options:"i"} 

@@ -19,7 +19,8 @@ const path = require('path');
         }
 
         try {
-            const fileType = req.file.fieldname === 'image';  // Determine the file type
+    
+            const fileType = 'image';  // Determine the file type
             const filePath = path.join(__dirname, '..', 'uploads', fileType + 's', file.filename);
             const fileContent = fs.readFileSync(filePath, { encoding: 'base64' });
             await uploadToGitHub(file.filename, fileContent, fileType);
@@ -73,6 +74,8 @@ const path = require('path');
 
 // Function to delete file from GitHub
     const deleteFromGitHub = async (fileName, fileType) => {
+        
+        
         try {
             console.log(`Deleting ${fileType} from GitHub: ${fileName}`);
             const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/uploads/${fileType}s/${fileName}`;
