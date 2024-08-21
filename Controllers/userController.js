@@ -17,7 +17,7 @@ const githubController = require('../Controllers/githubController');
             }else{
                 // register user
                 const newUser = new users({
-                    username,email,password,github:"",linkedin:"",profImg:"https://www.pngkey.com/png/full/233-2332677_ega-png.png"
+                    username,email,password,github:"",linkedin:"",profImg:""
                 })
                 await newUser.save()  
                 res.status(200).json(newUser)
